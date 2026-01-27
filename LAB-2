@@ -1,0 +1,60 @@
+public class Main {
+
+    int partition(int a[], int lb, int ub) {
+        int pivot = a[lb];
+        int start = lb;
+        int end = ub;
+
+        while (start < end) {
+            while (start <= ub && a[start] <= pivot) {
+                start++;
+            }
+            while (a[end] > pivot) {
+                end--;
+            }
+            if (start < end) {
+                int temp = a[start];
+                a[start] = a[end];
+                a[end] = temp;
+            }
+        }
+        int temp = a[lb];
+        a[lb] = a[end];
+        a[end] = temp;
+
+        return end; 
+    }
+
+    void quickSort(int a[], int lb, int ub) {
+        if (lb < ub) {
+            int loc = partition(a, lb, ub);
+            quickSort(a, lb, loc - 1);
+            quickSort(a, loc + 1, ub);
+        }
+    }
+
+    public static void main(String[] args) {
+        Main obj = new Main();
+
+        // Test with different input sizes
+        int[] sizes = {10, 100, 1000, 10000, 50000};
+        System.out.println("Size\tExecution Time (ns)");
+        for (int size : sizes) {
+            int[] arr = new int[size];
+
+            // Fill array with random numbers
+            for (int i = 0; i < size; i++) {
+                arr[i] = (int)(Math.random() * 10000);
+            }
+
+            long startTime = System.nanoTime();  // start time
+            obj.quickSort(arr, 0, arr.length - 1);
+            long endTime = System.nanoTime();    // end time
+
+            long duration = (endTime - startTime); // in nanoseconds
+           
+            System.out.println(size + "\t " + duration);
+        }
+    }
+}
+
