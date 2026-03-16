@@ -1,0 +1,69 @@
+import java.util.*;
+
+public class Main {
+
+    static List<Integer>[] graph;
+    static int[] match;
+    static boolean[] visited;
+
+    static boolean dfs(int u) {
+        for (int v : graph[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                if (match[v] == -1 || dfs(match[v])) {
+                    match[v] = u;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        int[] x = new int[n];
+        int[] q = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            x[i] = sc.nextInt();
+            q[i] = sc.nextInt();
+        }
+
+        int[] y = new int[m];
+        int[] p = new int[m];
+
+        for (int i = 0; i < m; i++) {
+            y[i] = sc.nextInt();
+            p[i] = sc.nextInt();
+        }
+
+        graph = new ArrayList[n];
+        for (int i = 0; i < n; i++)
+            graph[i] = new ArrayList<Integer>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (y[j] > x[i] && p[j] <= q[i]) {
+                    graph[i].add(j);
+                }
+            }
+        }
+
+        match = new int[m];
+        Arrays.fill(match, -1);
+
+        int result = 0;
+
+        for (int i = 0; i < n; i++) {
+            visited = new boolean[m];
+            if (dfs(i))
+                result++;
+        }
+
+        System.out.println(result);
+    }
+}
